@@ -1,7 +1,9 @@
 import bcrypt from 'bcrypt';
 import { NextFunction, Request, Response } from 'express';
+import { Secret } from 'jsonwebtoken';
 import config from '../../../config';
 import ApiError from '../../../errors/ApiError';
+import { jwtHelpers } from '../../../helpers/jwtHelpers';
 import { UserModel } from '../users/user.model';
 
 const signupUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -12,8 +14,6 @@ const signupUser = async (req: Request, res: Response, next: NextFunction) => {
       password,
       Number(config.bycrypt_salt_rounds)
     );
-
-    req.body.password = hashedPassword;
 
     const isUserExist = await UserModel.getUniqueUser(name, email);
 
@@ -31,7 +31,7 @@ const signupUser = async (req: Request, res: Response, next: NextFunction) => {
       }
     }
 
-    const result = await UserModel.signupUser(name, email, password);
+    const result = await UserModel.signupUser(name, email, hashedPassword);
 
     res.send({
       success: true,
@@ -44,6 +44,49 @@ const signupUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const loginUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { email, password } = req.body;
+
+    const isLoggedIn = await UserModel.loginUser(email, password);
+
+    const accessToken = jwtHelpers.createToken(
+      {
+        userId: isLoggedIn?.id,
+        email: isLoggedIn?.email,
+      },
+      config.jwt.secret as Secret,
+      config.jwt.expires_in as string
+    );
+
+    const refreshToken = jwtHelpers.createToken(
+      {
+        userId: isLoggedIn?.id,
+        email: isLoggedIn?.email,
+      },
+      config.jwt.refresh_secret as Secret,
+      config.jwt.refresh_expires_in as string
+    );
+
+    const cookieOptions = {
+      secure: config.env === 'production',
+      httpOnly: true,
+    };
+
+    res.cookie('refreshToken', refreshToken, cookieOptions);
+
+    res.send({
+      success: true,
+      statusCode: 200,
+      message: 'user login successfully',
+      data: accessToken,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const AuthController = {
   signupUser,
+  loginUser,
 };
