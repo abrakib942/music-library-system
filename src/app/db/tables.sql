@@ -35,3 +35,32 @@ CREATE TABLE
         album_id INTEGER REFERENCES albums(id),
         FOREIGN KEY (album_id) REFERENCES albums(id)
     );
+
+INSERT INTO
+    albums (title, release_year, genre)
+VALUES ('Album 1', 2022, 'Rock')
+RETURNING id;
+
+INSERT INTO artists (name) VALUES ('AB') RETURNING id;
+
+INSERT INTO
+    users(name, email, password)
+VALUES (
+        'abc',
+        'abc@gmail.com',
+        '123456'
+    )
+RETURNING *
+
+INSERT INTO
+    users (name, email, password)
+VALUES ('AB', 'ab@gmail.com', '123456')
+RETURNING id
+
+SELECT * FROM albums;
+
+SELECT * FROM artists
+
+SELECT * FROM users
+
+SELECT * FROM users WHERE email = 'ab@gmail.com'
