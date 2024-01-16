@@ -39,8 +39,50 @@ async function loginUser(email: string, password: string) {
   return user.rows[0];
 }
 
+async function getAllUsers() {
+  const result = await pool.query('SELECT * FROM users');
+  return result.rows;
+}
+
+async function getSingleUser(userId: string) {
+  const result = await pool.query('SELECT * FROM users WHERE id = $1', [
+    userId,
+  ]);
+  return result.rows[0];
+}
+
+// async function updateUser(userId: string, updatedFields?: any) {
+//   const { name, email, password } = updatedFields;
+
+//   let hashedPassword;
+//   if (password) {
+//     hashedPassword = await bcrypt.hash(
+//       password,
+//       Number(config.bycrypt_salt_rounds)
+//     );
+//   }
+
+//   const result = await pool.query(
+//     'UPDATE users SET name = $1, email = $2, password = $3 WHERE id = $4 RETURNING *',
+//     [name, email, hashedPassword, userId]
+//   );
+//   return result.rows[0];
+// }
+
+async function deleteUser(userId: string) {
+  const result = await pool.query(
+    'DELETE FROM users WHERE id = $1 RETURNING *',
+    [userId]
+  );
+  return result.rows[0];
+}
+
 export const UserModel = {
   signupUser,
   getUniqueUser,
   loginUser,
+  getAllUsers,
+  getSingleUser,
+  // updateUser,
+  deleteUser,
 };
