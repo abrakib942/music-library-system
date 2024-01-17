@@ -17,11 +17,16 @@ CREATE TABLE album_artists (
 );
 
 CREATE TABLE songs (
-    id UUID DEFAULT uuid_generate_v4 () PRIMARY KEY, title VARCHAR(100) NOT NULL, duration INTEGER NOT NULL, album_id UUID REFERENCES albums (id), FOREIGN KEY (album_id) REFERENCES albums (id)
+    id UUID DEFAULT uuid_generate_v4 () PRIMARY KEY, title VARCHAR(100) NOT NULL, duration FLOAT NOT NULL, album_id UUID REFERENCES albums (id), FOREIGN KEY (album_id) REFERENCES albums (id)
 );
+
+ALTER TABLE albums
+ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
 ALTER TABLE artists
 ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE songs ADD COLUMN duration FLOAT
 
 SELECT * FROM albums;
 
