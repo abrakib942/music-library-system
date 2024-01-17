@@ -23,32 +23,44 @@ async function createAlbum(
 
 async function getAlbums(
   filter: { genre?: string; release_year?: number; title?: string },
-  offset: number,
-  limit: number
+  options: any
 ): Promise<Album[]> {
   let query = 'SELECT * FROM albums WHERE 1=1';
   const values: any[] = [];
 
+  const { page: offset, limit } = options;
+
   // Add filters
-  if (filter && filter.genre) {
-    query += ' AND genre = $1';
-    values.push(filter.genre);
-  }
-  if (filter && filter.release_year) {
-    query += ' AND release_year = $2';
-    values.push(filter.release_year);
-  }
-  if (filter && filter.title) {
-    query += ' AND title ILIKE $3';
-    values.push(`%${filter.title}%`);
+  if (filter) {
+    if (filter.genre) {
+      query += ' AND genre = $1';
+      values.push(filter.genre);
+    }
+    if (filter.release_year) {
+      query += ' AND release_year = $1';
+      values.push(filter.release_year);
+    }
+    if (filter.title) {
+      query += ' AND title ILIKE $1::text';
+      values.push(`%${filter.title}%`);
+    }
   }
 
-  // Add pagination
-  query += ' ORDER BY created_at DESC, title OFFSET $4 LIMIT $5';
-  values.push(offset, limit);
+  if (offset || limit) {
+    query += ' ORDER BY created_at DESC, title OFFSET $1 LIMIT $2';
+    values.push(offset, limit);
+  }
 
   const result = await pool.query(query, values);
   return result.rows;
+}
+
+async function getSingleAlbum(albumId: string): Promise<Album> {
+  const result = await pool.query('SELECT * FROM albums WHERE id = $1', [
+    albumId,
+  ]);
+
+  return result.rows[0];
 }
 
 async function updateAlbum(
@@ -75,6 +87,7 @@ async function deleteAlbum(albumId: string): Promise<Album> {
 export const AlbumModel = {
   createAlbum,
   getAlbums,
+  getSingleAlbum,
   updateAlbum,
   deleteAlbum,
 };

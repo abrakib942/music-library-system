@@ -1,4 +1,5 @@
 import express from 'express';
+import { AlbumRoutes } from '../modules/album/album.routes';
 import { AuthRoutes } from '../modules/auth/auth.routes';
 import { UserRoutes } from '../modules/users/user.routes';
 
@@ -12,6 +13,10 @@ const moduleRoutes = [
   {
     path: '/users',
     routes: UserRoutes,
+  },
+  {
+    path: '/albums',
+    routes: AlbumRoutes,
   },
 ];
 
