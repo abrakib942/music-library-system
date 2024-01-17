@@ -1,5 +1,6 @@
 import express from 'express';
 import { AlbumRoutes } from '../modules/album/album.routes';
+import { ArtistRoutes } from '../modules/artists/artists.routes';
 import { AuthRoutes } from '../modules/auth/auth.routes';
 import { SongRoutes } from '../modules/songs/song.routes';
 import { UserRoutes } from '../modules/users/user.routes';
@@ -22,6 +23,10 @@ const moduleRoutes = [
   {
     path: '/songs',
     routes: SongRoutes,
+  },
+  {
+    path: '/artists',
+    routes: ArtistRoutes,
   },
 ];
 
