@@ -37,3 +37,9 @@ SELECT * FROM songs
 SELECT * FROM album_artists
 
 SELECT * FROM users
+
+INSERT INTO
+    album_artists (album_id, artist_id)
+VALUES (
+        '6dcdbd7e-7d29-446b-894f-0900613657e2', 'f52d7590-015c-4027-8656-64fd0777938d'
+    );

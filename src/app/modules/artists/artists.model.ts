@@ -14,15 +14,39 @@ async function createArtist(name: string): Promise<Artist> {
 }
 
 async function getArtists(): Promise<Artist[]> {
-  const result = await pool.query('SELECT * FROM artists');
+  const query = `SELECT * FROM artists
+    INNER JOIN album_artists ON artists.id = album_artists.artist_id
+
+    `;
+
+  // const query = `SELECT * FROM album_artists
+  //   JOIN artists ON album_artists.artist_id = artists.id
+  //   JOIN albums ON album_artists.album_id = albums.id
+
+  //   `;
+
+  const result = await pool.query(query);
+
   return result.rows;
 }
 
 async function getSingleArtist(artistId: string): Promise<Artist> {
-  const result = await pool.query('SELECT * FROM artists WHERE id = $1', [
+  const artistResult = await pool.query(`SELECT * FROM artists WHERE id = $1`, [
     artistId,
   ]);
-  return result.rows[0];
+
+  const albumResult = await pool.query(
+    `
+   SELECT * FROM albums 
+      INNER JOIN album_artists ON albums.id = album_artists.album_id 
+      WHERE album_artists.artist_id = $1`,
+    [artistId]
+  );
+
+  const artist = artistResult.rows[0];
+  artist.albums = albumResult.rows;
+
+  return artist;
 }
 
 async function updateArtist(artistId: string, name: string): Promise<Artist> {

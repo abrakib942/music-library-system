@@ -25,42 +25,71 @@ async function getAlbums(
   filter: { genre?: string; release_year?: number; title?: string },
   options: any
 ): Promise<Album[]> {
-  let query = 'SELECT * FROM albums WHERE 1=1';
-  const values: any[] = [];
+  const whereClause = Object.keys(filter)
+    .filter(key => filter[key] !== undefined)
+    .map((key, index) => `${key} = $${index + 1}`)
+    .join(' AND ');
 
-  const { page: offset, limit } = options;
+  // const { page: offset, limit } = options;
+
+  // const currentPage = 1;
+
+  // ORDER BY created_at DESC
+  // LIMIT 10 OFFSET ${(currentPage - 1) * 10}
+  // `;
+
+  const query = `SELECT * FROM albums
+
+ INNER JOIN album_artists ON albums.id = album_artists.album_id
+
+  ${whereClause ? ' WHERE ' + whereClause : ''}
+   
+  `;
+
+  const values: any[] = Object.values(filter).filter(
+    value => value !== undefined
+  );
 
   // Add filters
-  if (filter) {
-    if (filter.genre) {
-      query += ' AND genre = $1';
-      values.push(filter.genre);
-    }
-    if (filter.release_year) {
-      query += ' AND release_year = $1';
-      values.push(filter.release_year);
-    }
-    if (filter.title) {
-      query += ' AND title ILIKE $1::text';
-      values.push(`%${filter.title}%`);
-    }
-  }
-
-  if (offset || limit) {
-    query += ' ORDER BY created_at DESC, title OFFSET $1 LIMIT $2';
-    values.push(offset, limit);
-  }
+  // if (filter) {
+  //   if (filter.genre) {
+  //     query += ' AND genre = $1';
+  //     values.push(filter.genre);
+  //   }
+  //   if (filter.release_year) {
+  //     query += ' AND release_year = $2';
+  //     values.push(filter.release_year);
+  //   }
+  //   if (filter.title) {
+  //     query += ' AND title ILIKE $3::text';
+  //     values.push(`%${filter.title}%`);
+  //   }
+  // }
 
   const result = await pool.query(query, values);
   return result.rows;
 }
 
-async function getSingleAlbum(albumId: string): Promise<Album> {
-  const result = await pool.query('SELECT * FROM albums WHERE id = $1', [
+async function getSingleAlbum(albumId: string): Promise<Album | null> {
+  const albumResult = await pool.query('SELECT * FROM albums WHERE id = $1', [
     albumId,
   ]);
 
-  return result.rows[0];
+  if (albumResult.rows.length === 0) {
+    return null;
+  }
+
+  const artistResult = await pool.query(
+    'SELECT artists.id, artists.name FROM artists ' +
+      'INNER JOIN album_artists ON artists.id = album_artists.artist_id ' +
+      'WHERE album_artists.album_id = $1',
+    [albumId]
+  );
+
+  const album = albumResult.rows[0];
+  album.artists = artistResult.rows;
+
+  return album;
 }
 
 async function updateAlbum(
