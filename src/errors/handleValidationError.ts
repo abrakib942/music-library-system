@@ -1,9 +1,8 @@
-import { Prisma } from '@prisma/client';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { IGenericErrorResponse } from '../interfaces/common';
 
-const handleValidationError = (
-  error: Prisma.PrismaClientValidationError
-): IGenericErrorResponse => {
+const handleValidationError = (error: any): IGenericErrorResponse => {
   const errors = [
     {
       path: '',

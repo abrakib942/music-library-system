@@ -62,7 +62,7 @@ yarn start
 
 ## Base URL
 
-The base URL for all API endpoints is: `http://localhost:5000/api/v1`
+The base URL for all API endpoints is: `https://music-library-system.vercel.app/api/v1`
 
 ## Registration and Login
 
@@ -87,13 +87,13 @@ The base URL for all API endpoints is: `http://localhost:5000/api/v1`
     {
       "success": true,
       "statusCode": 200,
-      "message": "User created successfully",
+      "message": "Users created successfully",
       "data": {
-        "id": "54233862-70b5-4992-804c-3672bdeaceb7",
+        "id": "39b5408c-4775-45a1-ae77-70cf359912ee",
         "name": "Steve Smith",
         "email": "smith@example.com",
-        "password": "$2b$12$hAHJcNDPRb3QOsHs3by/NObEQV8faff2OmA4NWWnmlcYgpiJqTJHK",
-        "created_at": "2024-01-19T10:55:55.310Z"
+        "password": "$2b$12$Td52SvSY5Mq.Q5Eb6IGXAe2S3KEq3x7Cn6oODllH.n2I/Bh6Rf5yW",
+        "created_at": "2024-01-19T06:57:53.755Z"
       }
     }
     ```
@@ -119,7 +119,7 @@ The base URL for all API endpoints is: `http://localhost:5000/api/v1`
       "success": true,
       "statusCode": 200,
       "message": "user login successfully",
-      "data": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NDIzMzg2Mi03MGI1LTQ5OTItODA0Yy0zNjcyYmRlYWNlYjciLCJlbWFpbCI6InNtaXRoQGV4YW1wbGUuY29tIiwiaWF0IjoxNzA1NjYxOTQxLCJleHAiOjE3MDU3NDgzNDF9.E32TZ_5BjvS68wXvdvV_yMS6CcAgVVtP7JUi-e2sBpQ"
+      "data": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzOWI1NDA4Yy00Nzc1LTQ1YTEtYWU3Ny03MGNmMzU5OTEyZWUiLCJlbWFpbCI6InNtaXRoQGV4YW1wbGUuY29tIiwiaWF0IjoxNzA1NjY5MTI0LCJleHAiOjE3MDU3NTU1MjR9.iJIWtlMMSbsLo3K5mcxw0avDuYzkb6zo7q94jiN3Ang"
     }
     ```
 
@@ -144,16 +144,18 @@ The base URL for all API endpoints is: `http://localhost:5000/api/v1`
       "success": true,
       "message": "album created successfully",
       "data": {
-        "id": "d3df9c69-a6c8-42ec-a06e-c400e01369ab",
+        "id": "8616c207-d278-463d-9d4b-0186f77a5c71",
         "title": "Jhoom",
         "release_year": 2023,
         "genre": "Pop",
-        "created_at": "2024-01-19T11:05:19.920Z"
+        "created_at": "2024-01-19T07:04:11.944Z"
       }
     }
     ```
 
 - **GET** `/albums`
+
+  - for filters `/albums?genre=Pop` `/albums?release_year=2023`
 
   - Response:
 
@@ -164,19 +166,28 @@ The base URL for all API endpoints is: `http://localhost:5000/api/v1`
     "message": "albums retrieved successfully",
     "data": [
       {
-        "id": "6dcdbd7e-7d29-446b-894f-0900613657e2",
-        "title": "obb",
+        "id": "8616c207-d278-463d-9d4b-0186f77a5c71",
+        "title": "Jhoom",
         "release_year": 2023,
-        "genre": "fun",
-        "created_at": "2024-01-18T18:28:01.914Z",
-        "album_id": "6dcdbd7e-7d29-446b-894f-0900613657e2",
-        "artist_id": "f52d7590-015c-4027-8656-64fd0777938d"
+        "genre": "Pop",
+        "created_at": "2024-01-19T07:04:11.944Z",
+        "album_id": "8616c207-d278-463d-9d4b-0186f77a5c71",
+        "artist_id": "8a21a0cf-a3d6-49ed-a288-bcbe7d748329"
+      },
+      {
+        "id": "5dc8ad59-e50b-42af-9540-f113e28d0253",
+        "title": "Love pair",
+        "release_year": 2023,
+        "genre": "Love",
+        "created_at": "2024-01-19T07:05:30.366Z",
+        "album_id": "5dc8ad59-e50b-42af-9540-f113e28d0253",
+        "artist_id": "655d476c-26a3-47e6-a45f-8fdcaa573f83"
       }
     ]
   }
   ```
 
-  - **GET** `/albums/6dcdbd7e-7d29-446b-894f-0900613657e2`
+  - **GET** `/albums/8616c207-d278-463d-9d4b-0186f77a5c71`
   - Get Artist by album_id
 
   - Response
@@ -185,16 +196,17 @@ The base URL for all API endpoints is: `http://localhost:5000/api/v1`
   {
     "statusCode": 200,
     "success": true,
+    "message": "Album retrieved successfully",
     "data": {
-      "id": "6dcdbd7e-7d29-446b-894f-0900613657e2",
-      "title": "obb",
+      "id": "8616c207-d278-463d-9d4b-0186f77a5c71",
+      "title": "Jhoom",
       "release_year": 2023,
-      "genre": "fun",
-      "created_at": "2024-01-17T14:32:58.519Z",
+      "genre": "Pop",
+      "created_at": "2024-01-19T07:04:11.944Z",
       "artists": [
         {
-          "id": "f52d7590-015c-4027-8656-64fd0777938d",
-          "name": "Allan walker"
+          "id": "8a21a0cf-a3d6-49ed-a288-bcbe7d748329",
+          "name": "Alan walker"
         }
       ]
     }
@@ -208,7 +220,7 @@ The base URL for all API endpoints is: `http://localhost:5000/api/v1`
 
   ```json
   {
-    "title": "Justin"
+    "title": "James"
   }
   ```
 
@@ -220,9 +232,9 @@ The base URL for all API endpoints is: `http://localhost:5000/api/v1`
     "success": true,
     "message": "Artist created successfully",
     "data": {
-      "id": "38c1a42e-24b2-408e-a2fe-52e680d05823",
-      "name": "Justin",
-      "created_at": "2024-01-19T11:10:19.006Z"
+      "id": "fce5563c-7ea1-4c92-ae82-05bfe1243b62",
+      "name": "james",
+      "created_at": "2024-01-19T07:20:14.454Z"
     }
   }
   ```
@@ -238,17 +250,24 @@ The base URL for all API endpoints is: `http://localhost:5000/api/v1`
     "message": "Artists retrieved successfully",
     "data": [
       {
-        "id": "f52d7590-015c-4027-8656-64fd0777938d",
-        "name": "Allan walker",
-        "created_at": "2024-01-18T18:28:01.914Z",
-        "album_id": "6dcdbd7e-7d29-446b-894f-0900613657e2",
-        "artist_id": "f52d7590-015c-4027-8656-64fd0777938d"
+        "id": "8a21a0cf-a3d6-49ed-a288-bcbe7d748329",
+        "name": "Alan walker",
+        "created_at": "2024-01-19T07:06:35.699Z",
+        "album_id": "8616c207-d278-463d-9d4b-0186f77a5c71",
+        "artist_id": "8a21a0cf-a3d6-49ed-a288-bcbe7d748329"
+      },
+      {
+        "id": "655d476c-26a3-47e6-a45f-8fdcaa573f83",
+        "name": "Balam",
+        "created_at": "2024-01-19T07:06:51.977Z",
+        "album_id": "5dc8ad59-e50b-42af-9540-f113e28d0253",
+        "artist_id": "655d476c-26a3-47e6-a45f-8fdcaa573f83"
       }
     ]
   }
   ```
 
-  - **GET** `/artists/f52d7590-015c-4027-8656-64fd0777938d`
+  - **GET** `/artists/8a21a0cf-a3d6-49ed-a288-bcbe7d748329`
   - Get album by artist_id
 
   - Response
@@ -257,20 +276,20 @@ The base URL for all API endpoints is: `http://localhost:5000/api/v1`
   {
     "statusCode": 200,
     "success": true,
-
+    "message": "Artist retrieved successfully",
     "data": {
-      "id": "f52d7590-015c-4027-8656-64fd0777938d",
-      "name": "Allan walker",
-      "created_at": "2024-01-17T17:43:30.966Z",
+      "id": "8a21a0cf-a3d6-49ed-a288-bcbe7d748329",
+      "name": "Alan walker",
+      "created_at": "2024-01-19T07:06:35.699Z",
       "albums": [
         {
-          "id": "6dcdbd7e-7d29-446b-894f-0900613657e2",
-          "title": "obb",
+          "id": "8616c207-d278-463d-9d4b-0186f77a5c71",
+          "title": "Jhoom",
           "release_year": 2023,
-          "genre": "fun",
-          "created_at": "2024-01-18T18:28:01.914Z",
-          "album_id": "6dcdbd7e-7d29-446b-894f-0900613657e2",
-          "artist_id": "f52d7590-015c-4027-8656-64fd0777938d"
+          "genre": "Pop",
+          "created_at": "2024-01-19T07:04:11.944Z",
+          "album_id": "8616c207-d278-463d-9d4b-0186f77a5c71",
+          "artist_id": "8a21a0cf-a3d6-49ed-a288-bcbe7d748329"
         }
       ]
     }
@@ -284,9 +303,9 @@ The base URL for all API endpoints is: `http://localhost:5000/api/v1`
 
   ```json
   {
-    "title": "Tumi",
+    "title": "ignite",
     "duration": 4.12,
-    "album_id": "6dcdbd7e-7d29-446b-894f-0900613657e2"
+    "album_id": "8616c207-d278-463d-9d4b-0186f77a5c71"
   }
   ```
 
@@ -298,11 +317,11 @@ The base URL for all API endpoints is: `http://localhost:5000/api/v1`
     "success": true,
     "message": "Song created successfully",
     "data": {
-      "id": "f7fcc53d-ac8a-410e-ae5e-5cddc6d06e20",
-      "title": "Tumi",
-      "album_id": "6dcdbd7e-7d29-446b-894f-0900613657e2",
-      "created_at": "2024-01-19T11:34:01.271Z",
-      "duration": 4.12
+      "id": "645cbbc4-4542-45a3-abd6-a26b646f68e5",
+      "title": "ignite",
+      "duration": 4.12,
+      "album_id": "8616c207-d278-463d-9d4b-0186f77a5c71",
+      "created_at": "2024-01-19T07:11:47.770Z"
     }
   }
   ```

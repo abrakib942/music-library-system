@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import pool from '../../db/db';
@@ -21,12 +22,9 @@ async function createAlbum(
   return result.rows[0];
 }
 
-async function getAlbums(
-  filter: { genre?: string; release_year?: number; title?: string },
-  options: any
-): Promise<Album[]> {
+async function getAlbums(filter: any, options: any): Promise<Album[]> {
   const whereClause = Object.keys(filter)
-    .filter(key => filter[key] !== undefined)
+    .filter(key => (filter[key] as string) !== undefined)
     .map((key, index) => `${key} = $${index + 1}`)
     .join(' AND ');
 
